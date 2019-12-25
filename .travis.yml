@@ -1,0 +1,45 @@
+# new .travis.yml for Fibonaccici Calculator 
+
+# let this old command in :-)
+language: generic
+
+# tell travis, what to do with our code:
+sudo: required
+services:
+  - docker
+  
+before_install:
+  - docker build -t engepple/react-test -f ./client/Dockerfile.dev ./client
+
+# lection 142 hint: change docker run command like below (not -- --coverage)
+script:
+  - docker run -e CI=true engepple/react-test npm run test
+  
+after_success:
+  - docker build -t engepple/multi-client -f ./client 
+  - docker build -t engepple/multi-nginx -f ./nginx
+  - docker build -t engepple/multi-server -f ./server   
+  - docker build -t engepple/multi-worker -f ./worker
+ 
+  # Log in to the Docker CLI (via travis ... a bit special)
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # Take those images and push them to docker hub
+  - docker push engepple/multi-client
+  - docker push engepple/multi-nginx
+  - docker push engepple/multi-server 
+  - docker push engepple/multi-worker
+ 
+#deploy:
+#  # edge = true is needed due to hint lecture 97
+#  edge: true
+#  provider: elasticbeanstalk
+#  region: "us-east-1"
+#  app: "docker-react"
+#  env: "DockerReact-env"
+#  bucket_name: "elasticbeanstalk-us-east-1-074329460040"
+#  bucket_path: "docker-react"
+#  on:
+#    branch: master
+#  access_key_id: $AWS_ACCESS_KEY
+#  secret_access_key: $AWS_SECRET_KEY
