@@ -1,4 +1,4 @@
-# new .travis.yml for Fibonaccici Calculator - another trial
+# new .travis.yml for Fibonaccici Calculator - trial #3 (nix -f)
 
 # let this old command in :-)
 language: generic
@@ -16,19 +16,19 @@ script:
   - docker run -e CI=true engepple/react-test npm run test
   
 after_success:
-  - docker build -t engepple/multi-client -f ./client 
-  - docker build -t engepple/multi-nginx -f ./nginx
-  - docker build -t engepple/multi-server -f ./server   
-  - docker build -t engepple/multi-worker -f ./worker
+  - docker build -t engepple/multi-client ./client 
+  - docker build -t engepple/multi-nginx ./nginx
+  - docker build -t engepple/multi-server ./server   
+  - docker build -t engepple/multi-worker ./worker
  
   # Log in to the Docker CLI (via travis ... a bit special)
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
   # Take those images and push them to docker hub
   - docker push engepple/multi-client
-  - docker push engepple/multi-nginx
-  - docker push engepple/multi-server 
-  - docker push engepple/multi-worker
+  - docker push engepple/multi-client
+  - docker push engepple/multi-client
+  - docker push engepple/multi-client
  
 #deploy:
 #  # edge = true is needed due to hint lecture 97
