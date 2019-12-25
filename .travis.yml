@@ -1,4 +1,4 @@
-# new .travis.yml for Fibonaccici Calculator - trial #3 (nix -f)
+# new .travis.yml for Fibonaccici Calculator - trial #4 (4 directories)
 
 # let this old command in :-)
 language: generic
@@ -26,9 +26,9 @@ after_success:
 
   # Take those images and push them to docker hub
   - docker push engepple/multi-client
-  - docker push engepple/multi-client
-  - docker push engepple/multi-client
-  - docker push engepple/multi-client
+  - docker push engepple/multi-nginx
+  - docker push engepple/multi-server
+  - docker push engepple/multi-worker
  
 #deploy:
 #  # edge = true is needed due to hint lecture 97
