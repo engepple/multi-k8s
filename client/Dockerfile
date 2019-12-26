@@ -1,10 +1,10 @@
-# Prod-version (incl EXPOSE for AWS work correctly)
+# Prod-version Client React-App(incl EXPOSE for AWS work correctly)
 # take Image "10-alpine" of node.js - because alpine doesn't exist
 
 FROM node:10-alpine as builder
 
 WORKDIR '/app'
-COPY ./package.json .
+COPY ./package.json ./
 RUN npm install
 COPY . .
 RUN npm run build
