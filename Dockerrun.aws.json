@@ -1,0 +1,48 @@
+{
+	"Comment": "AWS ElasticBeanstalk Definition file like docker-compose.yml",
+	"AWSEBDockerrunVersion": 2,
+	"containerDefinitions": [
+		{
+		"comment": "Container 5",
+		"name": "client",
+		"image": "eepple/multi-client",
+		"hostname": "client",
+		"essential": false,
+		"memory": 128
+		},
+		
+		{
+		"comment": "Container 4",
+		"name": "server",
+		"image": "eepple/multi-server",
+		"hostname": "api",
+		"essential": false,
+		"memory": 128
+		},
+		
+		{
+		"comment": "Container 6",
+		"name": "worker",
+		"image": "eepple/multi-worker",
+		"hostname": "worker",
+		"essential": false,
+		"memory": 128
+		},
+		
+		{
+		"comment": "Container 3",
+		"name": "nginx",
+		"image": "eepple/multi-nginx",
+		"hostname": "nginx",
+		"essential": true,
+		"portMappings": [
+			{
+			"hostPort": 80,
+			"containerPort": 80
+			}
+		],
+		"links": ["client", "server"],
+		"memory": 128
+		}
+	]
+}

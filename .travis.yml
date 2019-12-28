@@ -1,5 +1,6 @@
-# Version 2 .travis.yml for Fibonaccici Calculator - trial #4 (4 directories)
-# changed names of repositories accoriding to my username @ docker-Hub
+# Version 3 .travis.yml for Fibonaccici Calculator - trial #1
+# Deploy section added -after test ok ran fine
+# I just had to remove the # at the end of the file
 
 # let this old command in :-)
 language: generic
@@ -31,16 +32,18 @@ after_success:
   - docker push eepple/multi-server
   - docker push eepple/multi-worker
  
-#deploy:
-#  # edge = true is needed due to hint lecture 97
-#  edge: true
-#  provider: elasticbeanstalk
-#  region: "us-east-1"
-#  app: "docker-react"
-#  env: "DockerReact-env"
-#  bucket_name: "elasticbeanstalk-us-east-1-074329460040"
-#  bucket_path: "docker-react"
-#  on:
-#    branch: master
-#  access_key_id: $AWS_ACCESS_KEY
-#  secret_access_key: $AWS_SECRET_KEY
+deploy:
+# edge = true is needed due to hint lecture 97 and 161
+  edge: true
+
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-074329460040"
+  bucket_path: "docker-multi"
+  on:
+    branch: master
+ # due to bugfix hin 160
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
