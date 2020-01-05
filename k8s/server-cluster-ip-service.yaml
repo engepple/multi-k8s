@@ -1,0 +1,13 @@
+# k8s Config file for Server Cluster-IP
+
+apiVersion: v1
+kind: Service
+metadata:
+    name: server-cluster-ip-service
+spec:
+    type: ClusterIP
+    selector:
+        component: server
+    ports:
+        - port: 5000
+          targetPort: 5000
