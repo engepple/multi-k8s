@@ -1,0 +1,13 @@
+# the mega travis-yaml file
+
+sudo: required
+services:
+  - docker
+before_install:
+  - curl https://sdk.cloud.google.com | > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc                             # Install Google SDK
+  - gcloud components update kubectl                                        # install kubectl on iour travis-machine
+  - gcloud auth activate-service-account --key-file service-account.json    # like IAM @ AWS, Authorize Access
+  
+  
+  
