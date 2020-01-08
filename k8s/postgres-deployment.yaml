@@ -1,4 +1,4 @@
-# k8s Config file for postgres incl PVC w/o subpath
+# k8s Config file for postgres incl PVC incl Bugfix Michael
 
 apiVersion: apps/v1
 kind: Deployment
@@ -18,6 +18,9 @@ spec:
                 - name: postgres-storage
                   persistentVolumeClaim:
                     claimName: database-persistent-volume-claim
+                    # Bugfix Michael ( Error from postgres container )
+                    accessModes:
+                      - ReadWriteMany
             containers:
                 - name: postgres
                   image: postgres
@@ -26,7 +29,7 @@ spec:
                   volumeMounts:
                     - name: postgres-storage
                       mountPath: /var/lib/postgresql/data
-                      # subpath removed
+                      subPath: postgres
                   env:
                     - name: PGPASSWORD
                       valueFrom:
