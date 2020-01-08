@@ -3,11 +3,30 @@
 sudo: required
 services:
   - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)                                             # store SHA from latest Git-Commit
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1                                       # avoid any prompts or interactive messages
 before_install:
-  - curl https://sdk.cloud.google.com | > /dev/null;
+  # decrypt credential fie for Google Service Account
+  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
+  - curl https://sdk.cloud.google.com | > /dev/null;                        # start google SDK
   - source $HOME/google-cloud-sdk/path.bash.inc                             # Install Google SDK
   - gcloud components update kubectl                                        # install kubectl on iour travis-machine
   - gcloud auth activate-service-account --key-file service-account.json    # like IAM @ AWS, Authorize Access
+  - gcloud config set project multi-k8s-264220                              # connect to GCP Project
+  - gcloud config set compute/zone europe-west3-a                           # handover correct Zone of project
+  - gcloud container clusters get-credentials ee-k8s-cluster                # handover name of KE project
+  # use Dockercredentials securely stored in Travis-CI 
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  # Build a temporary Image for Travis tests
+  - docker build -t eepple/react-test -f ./client/Dockerfile.dev ./client
   
+script:
+  - docker run -e CI=true eepple/react-test npm run test
   
-  
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
