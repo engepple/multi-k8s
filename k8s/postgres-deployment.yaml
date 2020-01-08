@@ -26,6 +26,7 @@ spec:
                   volumeMounts:
                     - name: postgres-storage
                       mountPath: /var/lib/postgresql/data
+                      # subpath removed
                   env:
                     - name: PGPASSWORD
                       valueFrom:
